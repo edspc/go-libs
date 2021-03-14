@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 )
 
 type BaseClient struct {
@@ -23,33 +22,24 @@ type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-var (
-	client BaseClient
-)
-
-func init() {
-	client.HTTPClient = &http.Client{Timeout: time.Minute}
-	client.Header = &http.Header{}
+func (c *BaseClient) SetBaseURL(url string) {
+	c.BaseURL = url
 }
 
-func SetBaseURL(url string) {
-	client.BaseURL = url
-}
-
-func (c BaseClient) GetUrl(url string) string {
+func (c *BaseClient) GetUrl(url string) string {
 	return c.BaseURL + "/" + strings.TrimLeft(url, "/")
 }
 
-func SetAuthHeader(authType string, authTocken string) {
-	client.Header.Set("Authorization", authType+" "+authTocken)
+func (c *BaseClient) SetAuthHeader(authType string, authTocken string) {
+	c.Header.Set("Authorization", authType+" "+authTocken)
 }
 
-func AddHeader(name string, value string) {
-	client.Header.Add(name, value)
+func (c *BaseClient) AddHeader(name string, value string) {
+	c.Header.Add(name, value)
 }
 
 func (c *BaseClient) SendRequest(req *http.Request, v interface{}) (*http.Response, error) {
-	req.Header = *client.Header
+	req.Header = *c.Header
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	res, err := c.HTTPClient.Do(req)
 
