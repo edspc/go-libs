@@ -1,18 +1,16 @@
-package server
+package utils
 
 import (
 	"context"
 	"io/ioutil"
 	"log"
 	"net/http"
-
-	"github.com/edspc/go-libs/web/data"
 )
 
-func ServeOneRequest(location data.ServerLocation) data.RequestData {
+func ServeOneRequest(location URI) RequestData {
 
-	srv := &http.Server{Addr: location.Server.GetServer()}
-	var data data.RequestData
+	srv := &http.Server{Addr: location.Host.GetHostString()}
+	var data RequestData
 
 	http.HandleFunc(location.Uri, func(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(r.Body)
