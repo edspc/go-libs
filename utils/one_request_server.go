@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,6 +22,8 @@ func ServeOneRequest(location URI) RequestData {
 
 		data.Body = body
 		data.Params = r.URL.Query()
+
+		fmt.Fprintf(w, "<script type=\"text/javascript\">window.close();</script>")
 
 		go func() {
 			cxt := context.Background()

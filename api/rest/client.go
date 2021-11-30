@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -30,8 +31,12 @@ func (c *BaseClient) GetUrl(url string) string {
 	return c.BaseURL + "/" + strings.TrimLeft(url, "/")
 }
 
-func (c *BaseClient) SetAuthHeader(authType string, authTocken string) {
-	c.Header.Set("Authorization", authType+" "+authTocken)
+func (c *BaseClient) GetURLWithQuery(query url.Values) string {
+	return c.BaseURL + "?" + query.Encode()
+}
+
+func (c *BaseClient) SetAuthHeader(authType string, authToken string) {
+	c.Header.Set("Authorization", authType+" "+authToken)
 }
 
 func (c *BaseClient) AddHeader(name string, value string) {
