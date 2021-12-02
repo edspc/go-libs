@@ -27,7 +27,7 @@ func ServeOneRequest(location URI) RequestData {
 
 		go func() {
 			cxt := context.Background()
-			if err := srv.Shutdown(cxt); err != http.ErrServerClosed {
+			if err := srv.Shutdown(cxt); err != nil && err != http.ErrServerClosed {
 				log.Fatalf("Shutdown(): %v", err)
 			}
 		}()
